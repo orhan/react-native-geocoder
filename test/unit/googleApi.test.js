@@ -51,6 +51,9 @@ describe('googleApi', function() {
       it ('for waterloo-bridge', async function() {
         mockFetch(require('./fixtures/waterloo-bridge.js'));
         let [first, ...ret] = await GoogleApi.geocodeRequest();
+        expect(first.region.center.lat).to.eql(51.506349);
+        expect(first.region.center.lng).to.eql(-0.114699);
+        expect(first.region.radius).to.eql(177);
         expect(first.countryCode).to.eql('GB');
         expect(first.feature).to.be.eql(null);
         expect(first.locality).to.eql('London');
@@ -61,6 +64,9 @@ describe('googleApi', function() {
       it ('for yosemite park', async function() {
         mockFetch(require('./fixtures/yosemite-park.js'));
         let [first, ...ret] = await GoogleApi.geocodeRequest();
+        expect(first.region.center.lat).to.eql(37.865101);
+        expect(first.region.center.lng).to.eql(-119.538329);
+        expect(first.region.radius).to.eql(191);
         expect(first.countryCode).to.eql('US');
         expect(first.feature).to.be.eql('Yosemite National Park');
         expect(first.streetName).to.be.eql(null);

@@ -1,8 +1,11 @@
+import { getCenterOfBounds, getDistance } from 'geolib';
+
 const googleUrl = 'https://maps.google.com/maps/api/geocode/json';
 
 function format(raw) {
   const address = {
     position: {},
+    region: null,
     formattedAddress: raw.formatted_address || '',
     feature: null,
     streetNumber: null,
@@ -20,6 +23,27 @@ function format(raw) {
     address.position = {
       lat: raw.geometry.location.lat,
       lng: raw.geometry.location.lng,
+    }
+
+    if (raw.geometry.viewport) {
+      const northEast = {
+        latitude: raw.geometry.viewport.northeast.lat,
+        longitude: raw.geometry.viewport.northeast.lng,
+      };
+      const southWest = {
+        latitude: raw.geometry.viewport.southwest.lat,
+        longitude: raw.geometry.viewport.southwest.lng,
+      };
+      const center = getCenterOfBounds([northEast, southWest]);
+      const radius = getDistance(center, northEast);
+
+      address.region = {
+        center: {
+          lat: center.latitude,
+          lng: center.longitude,
+        },
+        radius,
+      }
     }
   }
 
