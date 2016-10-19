@@ -81,6 +81,7 @@ RCT_EXPORT_METHOD(geocodeAddress:(NSString *)address
 
   for (int i = 0; i < placemarks.count; i++) {
     CLPlacemark* placemark = [placemarks objectAtIndex:i];
+    CLCircularRegion* region = placemark.region;
 
     NSString* name = [NSNull null];
 
@@ -100,7 +101,13 @@ RCT_EXPORT_METHOD(geocodeAddress:(NSString *)address
          @"lat": [NSNumber numberWithDouble:placemark.location.coordinate.latitude],
          @"lng": [NSNumber numberWithDouble:placemark.location.coordinate.longitude],
          },
-     @"radius": [NSNumber numberWithDouble:[(CLCircularRegion *)placemark.region radius]] ?: [NSNull null],
+     @"region": placemark.region ? @{
+         @"center": @{
+             @"lat": [NSNumber numberWithDouble:region.center.latitude],
+             @"lng": [NSNumber numberWithDouble:region.center.longitude],
+             },
+         @"radius": [NSNumber numberWithDouble:region.radius],
+         } : [NSNull null],
      @"country": placemark.country ?: [NSNull null],
      @"countryCode": placemark.ISOcountryCode ?: [NSNull null],
      @"locality": placemark.locality ?: [NSNull null],
@@ -110,7 +117,7 @@ RCT_EXPORT_METHOD(geocodeAddress:(NSString *)address
      @"postalCode": placemark.postalCode ?: [NSNull null],
      @"adminArea": placemark.administrativeArea ?: [NSNull null],
      @"subAdminArea": placemark.subAdministrativeArea ?: [NSNull null],
-     @"formattedAddress": [lines componentsJoinedByString:@", "]
+     @"formattedAddress": [lines componentsJoinedByString:@", "],
    };
 
     [results addObject:result];

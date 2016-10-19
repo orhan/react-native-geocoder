@@ -73,8 +73,9 @@ public class RNGeocoderModule extends ReactContextBaseJavaModule {
             position.putDouble("lat", address.getLatitude());
             position.putDouble("lng", address.getLongitude());
             result.putMap("position", position);
-            // There is no radius field in the `Address` object.
-            result.putString("radius", null);
+
+            // There is no region field in the `Address` object.
+            result.putString("region", null);
 
             final String feature_name = address.getFeatureName();
             if (feature_name != null && !feature_name.equals(address.getSubThoroughfare()) &&
