@@ -100,6 +100,7 @@ RCT_EXPORT_METHOD(geocodeAddress:(NSString *)address
          @"lat": [NSNumber numberWithDouble:placemark.location.coordinate.latitude],
          @"lng": [NSNumber numberWithDouble:placemark.location.coordinate.longitude],
          },
+     @"radius": [NSNumber numberWithDouble:[(CLCircularRegion *)placemark.region radius]] ?: [NSNull null],
      @"country": placemark.country ?: [NSNull null],
      @"countryCode": placemark.ISOcountryCode ?: [NSNull null],
      @"locality": placemark.locality ?: [NSNull null],
