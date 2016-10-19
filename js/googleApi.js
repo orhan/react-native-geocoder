@@ -35,7 +35,7 @@ function format(raw) {
         longitude: raw.geometry.viewport.southwest.lng,
       };
       const center = getCenterOfBounds([northEast, southWest]);
-      const radius = getDistance(center, northEast);
+      const radius = Math.max(getDistance(center, northEast), getDistance(center, southWest));
 
       address.region = {
         center: {
