@@ -42,7 +42,7 @@ public class RNGeocoderModule extends ReactContextBaseJavaModule {
             if(addresses != null && addresses.size() > 0) {
                 promise.resolve(transform(addresses));
             } else {
-                promise.reject("NO_RESULTS", "Geocoder returned an empty list");
+                promise.reject("NOT_AVAILABLE", "Geocoder returned an empty list");
             }
 
         }
