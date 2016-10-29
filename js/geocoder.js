@@ -10,14 +10,26 @@ export default {
     this.apiKey = key;
   },
 
+  geocodePositionFallback(position) {
+    if (!this.apiKey) { throw new Error("Google API key required"); }
+
+    return GoogleApi.geocodePosition(this.apiKey, position);
+  },
+
+  geocodeAddressFallback(address) {
+    if (!this.apiKey) { throw new Error("Google API key required"); }
+
+    return GoogleApi.geocodeAddress(this.apiKey, address);
+  },
+
   geocodePosition(position) {
     if (!position || !position.lat || !position.lng) {
       return Promise.reject(new Error("invalid position: {lat, lng} required"));
     }
 
     return RNGeocoder.geocodePosition(position).catch(err => {
-      if (!this.apiKey || err.code !== 'NOT_AVAILABLE') { throw err; }
-      return GoogleApi.geocodePosition(this.apiKey, position);
+      if (err.code !== 'NOT_AVAILABLE') { throw err; }
+      return this.geocodePositionFallback(position);
     });
   },
 
@@ -27,8 +39,8 @@ export default {
     }
 
     return RNGeocoder.geocodeAddress(address).catch(err => {
-      if (!this.apiKey || err.code !== 'NOT_AVAILABLE') { throw err; }
-      return GoogleApi.geocodeAddress(this.apiKey, address);
+      if (err.code !== 'NOT_AVAILABLE') { throw err; }
+      return this.geocodeAddressFallback(address);
     });
   },
 }
