@@ -39,7 +39,12 @@ public class RNGeocoderModule extends ReactContextBaseJavaModule {
 
         try {
             List<Address> addresses = geocoder.getFromLocationName(addressName, 20);
-            promise.resolve(transform(addresses));
+            if(addresses != null && addresses.size() > 0) {
+                promise.resolve(transform(addresses));
+            } else {
+                promise.reject("NOT_AVAILABLE", "Geocoder returned an empty list");
+            }
+
         }
 
         catch (IOException e) {
