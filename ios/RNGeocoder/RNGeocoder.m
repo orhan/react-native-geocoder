@@ -22,6 +22,17 @@
 
 RCT_EXPORT_MODULE();
 
+RCT_EXPORT_METHOD(setLanguage:(NSString *)language
+                  callback:(RCTResponseSenderBlock)callback)
+{
+  NSString *deviceLanguage = [[NSLocale preferredLanguages] objectAtIndex:0];
+  if ([deviceLanguage isEqualToString:language]) {
+    return callback(@[[NSNull null]]);
+  }
+
+  callback(@[language]);
+}
+
 RCT_EXPORT_METHOD(geocodePosition:(CLLocation *)location
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)

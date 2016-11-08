@@ -22,10 +22,24 @@ describe('googleApi', function() {
       expect(ret).to.eql('yo');
     });
 
+    it ('position with a specific language', async function() {
+      let ret = await GoogleApi.geocodePosition('myKey', {lat: 1.234, lng: 1.14}, 'ko');
+      expect(geocodeRequest).to.have.been.calledWith(
+        'https://maps.google.com/maps/api/geocode/json?key=myKey&latlng=1.234,1.14&language=ko');
+      expect(ret).to.eql('yo');
+    });
+
     it ('address', async function() {
-      let ret = await GoogleApi.geocodeAddress('myKey', "london");
+      let ret = await GoogleApi.geocodeAddress('myKey', 'london');
       expect(geocodeRequest).to.have.been.calledWith(
         'https://maps.google.com/maps/api/geocode/json?key=myKey&address=london');
+      expect(ret).to.eql('yo');
+    });
+
+    it ('address with a specific language', async function() {
+      let ret = await GoogleApi.geocodeAddress('myKey', 'london', 'ko');
+      expect(geocodeRequest).to.have.been.calledWith(
+        'https://maps.google.com/maps/api/geocode/json?key=myKey&address=london&language=ko');
       expect(ret).to.eql('yo');
     });
   });
@@ -39,10 +53,10 @@ describe('googleApi', function() {
     }
 
     it ('throws if invalid results', function() {
-      mockFetch({ status: "NOT_OK" });
+      mockFetch({ status: 'NOT_OK' });
       return GoogleApi.geocodeRequest().then(
         () => { throw new Error('cannot be there') },
-        (err) => { expect(err.message).to.contain("NOT_OK"); }
+        (err) => { expect(err.message).to.contain('NOT_OK'); }
       );
     });
 

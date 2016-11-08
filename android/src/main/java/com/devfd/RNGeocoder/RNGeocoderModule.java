@@ -1,8 +1,10 @@
 package com.devfd.RNGeocoder;
 
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -15,19 +17,39 @@ import com.facebook.react.bridge.WritableNativeMap;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class RNGeocoderModule extends ReactContextBaseJavaModule {
 
+    private Context context;
+    private Locale locale;
     private Geocoder geocoder;
 
     public RNGeocoderModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        geocoder = new Geocoder(reactContext.getApplicationContext());
+        context = reactContext.getApplicationContext();
+
+        locale = context.getResources().getConfiguration().locale;
+        geocoder = new Geocoder(context, locale);
     }
 
     @Override
     public String getName() {
         return "RNGeocoder";
+    }
+
+    @ReactMethod
+    public void setLanguage(String language, Callback callback) {
+        Locale target = new Locale(language);
+        if (!context.getResources().getConfiguration().locale.equals(target) && !locale.equals(target)) {
+          locale = target;
+          geocoder = new Geocoder(context, locale);
+
+          callback.invoke(language);
+          return;
+        }
+
+        callback.invoke((String) null);
     }
 
     @ReactMethod

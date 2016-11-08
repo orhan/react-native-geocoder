@@ -82,20 +82,30 @@ function format(raw) {
 }
 
 export default {
-  geocodePosition(apiKey, position) {
+  geocodePosition(apiKey, position, language = null) {
     if (!apiKey || !position || !position.lat || !position.lng) {
       return Promise.reject(new Error("invalid apiKey / position"));
     }
 
-    return this.geocodeRequest(`${googleUrl}?key=${apiKey}&latlng=${position.lat},${position.lng}`);
+    let url = `${googleUrl}?key=${apiKey}&latlng=${position.lat},${position.lng}`;
+    if (language) {
+      url = `${url}&language=${language}`;
+    }
+
+    return this.geocodeRequest(url);
   },
 
-  geocodeAddress(apiKey, address) {
+  geocodeAddress(apiKey, address, language = null) {
     if (!apiKey || !address) {
       return Promise.reject(new Error("invalid apiKey / address"));
     }
 
-    return this.geocodeRequest(`${googleUrl}?key=${apiKey}&address=${encodeURI(address)}`);
+    let url = `${googleUrl}?key=${apiKey}&address=${encodeURI(address)}`;
+    if (language) {
+      url = `${url}&language=${language}`;
+    }
+
+    return this.geocodeRequest(url);
   },
 
   async geocodeRequest(url) {
