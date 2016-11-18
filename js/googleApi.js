@@ -1,7 +1,7 @@
 import { getCenterOfBounds, getDistance } from 'geolib';
 
 export default {
-  googleUrl: 'https://maps.google.com/maps/api/geocode/json',
+  googleUrl: 'https://maps.googleapis.com/maps/api/geocode/json',
 
   format(raw) {
     const address = {
