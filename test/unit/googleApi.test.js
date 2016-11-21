@@ -18,28 +18,28 @@ describe('googleApi', function() {
     it ('position', async function() {
       let ret = await GoogleApi.geocodePosition('myKey', {lat: 1.234, lng: 1.14});
       expect(geocodeRequest).to.have.been.calledWith(
-        'https://maps.google.com/maps/api/geocode/json?key=myKey&latlng=1.234,1.14');
+        'https://maps.googleapis.com/maps/api/geocode/json?key=myKey&latlng=1.234,1.14');
       expect(ret).to.eql('yo');
     });
 
     it ('position with a specific language', async function() {
       let ret = await GoogleApi.geocodePosition('myKey', {lat: 1.234, lng: 1.14}, 'ko');
       expect(geocodeRequest).to.have.been.calledWith(
-        'https://maps.google.com/maps/api/geocode/json?key=myKey&latlng=1.234,1.14&language=ko');
+        'https://maps.googleapis.com/maps/api/geocode/json?key=myKey&latlng=1.234,1.14&language=ko');
       expect(ret).to.eql('yo');
     });
 
     it ('address', async function() {
       let ret = await GoogleApi.geocodeAddress('myKey', 'london');
       expect(geocodeRequest).to.have.been.calledWith(
-        'https://maps.google.com/maps/api/geocode/json?key=myKey&address=london');
+        'https://maps.googleapis.com/maps/api/geocode/json?key=myKey&address=london');
       expect(ret).to.eql('yo');
     });
 
     it ('address with a specific language', async function() {
       let ret = await GoogleApi.geocodeAddress('myKey', 'london', 'ko');
       expect(geocodeRequest).to.have.been.calledWith(
-        'https://maps.google.com/maps/api/geocode/json?key=myKey&address=london&language=ko');
+        'https://maps.googleapis.com/maps/api/geocode/json?key=myKey&address=london&language=ko');
       expect(ret).to.eql('yo');
     });
   });
