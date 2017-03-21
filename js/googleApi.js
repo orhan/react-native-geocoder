@@ -112,8 +112,10 @@ export default {
     const res = await fetch(url);
     const json = await res.json();
 
-    if (!json.results || json.status !== 'OK') {
+    if (json.status !== 'OK') {
       return Promise.reject(new Error(`geocoding error ${json.status}, ${json.error_message}`));
+    } else if (!json.length) {
+      return [];
     }
 
     return json.results.map(this.format);
