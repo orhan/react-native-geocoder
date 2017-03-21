@@ -1,6 +1,6 @@
 
 
-# react-native-geocoder 
+# react-native-geocoder
 
 [![CircleCI](https://circleci.com/gh/devfd/react-native-geocoder/tree/master.svg?style=shield)](https://circleci.com/gh/devfd/react-native-geocoder/tree/master)
 
@@ -122,13 +122,17 @@ both iOS and Android will return the following object:
 ```js
 {
     position: {lat, lng},
+    region: {
+      center: {lat, lng},
+      radius: Number,
+    } | null,
     formattedAddress: String, // the full address
     feature: String | null, // ex Yosemite Park, Eiffel Tower
     streetNumber: String | null,
     streetName: String | null,
     postalCode: String | null,
     locality: String | null, // city name
-    country: String, 
+    country: String,
     countryCode: String
     adminArea: String | null
     subAdminArea: String | null,
@@ -143,5 +147,4 @@ iOS does not allow sending multiple geocoding requests simultaneously, unless yo
 
 ### Android
 geocoding may not work on older android devices (4.1) and will not work if Google play services are not available.
-
-
+`region` will always be `null` on Android since it doesn't support the feature. In this case, `Geocoder.geocodePositionFallback` and `Geocoder.geocodeAddressFallback` may be used to get the `region` value.

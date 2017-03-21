@@ -1,13 +1,20 @@
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 import GoogleApi from './googleApi.js';
 
 const { RNGeocoder } = NativeModules;
 
 export default {
   apiKey: null,
+  language: null,
 
   setGoogleApiKey(key) {
     this.apiKey = key;
+  },
+
+  setLanguage(language) {
+    RNGeocoder.setLanguage(language, (result) => {
+      this.language = result;
+    });
   },
 
   geocodePosition(position, useGoogle = false) {
@@ -16,11 +23,11 @@ export default {
     }
 
     if (useGoogle && this.apiKey) {
-      return GoogleApi.geocodePosition(this.apiKey, position);
+      return GoogleApi.geocodePosition(this.apiKey, position, this.language);
     } else {
       return RNGeocoder.geocodePosition(position).catch(err => {
         if (!this.apiKey || err.code !== 'NOT_AVAILABLE') { throw err; }
-        return GoogleApi.geocodePosition(this.apiKey, position);
+        return GoogleApi.geocodePosition(this.apiKey, position, this.language);
       });
     }
   },
@@ -30,13 +37,13 @@ export default {
       return Promise.reject(new Error("address is null"));
     }
 
-    if (useGoogle && this.apiKey) {
-      return GoogleApi.geocodeAddress(this.apiKey, address);
-    } else {
-      return RNGeocoder.geocodeAddress(address).catch(err => {
-        if (!this.apiKey || err.code !== 'NOT_AVAILABLE') { throw err; }
-        return GoogleApi.geocodeAddress(this.apiKey, address);
-      });
+    if (this.language && (Platform.OS === 'ios')) {
+      return this.geocodeAddressFallback(address);
     }
+
+    return RNGeocoder.geocodeAddress(address).catch(err => {
+      if (err.code !== 'NOT_AVAILABLE') { throw err; }
+      return this.geocodeAddressFallback(address);
+    });
   },
 }
