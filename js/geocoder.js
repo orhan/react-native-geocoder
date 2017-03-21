@@ -37,13 +37,13 @@ export default {
       return Promise.reject(new Error("address is null"));
     }
 
-    if (this.language && (Platform.OS === 'ios')) {
-      return this.geocodeAddressFallback(address);
+    if (useGoogle && this.apiKey) {
+      return GoogleApi.geocodeAddress(this.apiKey, address, this.language);
     }
 
     return RNGeocoder.geocodeAddress(address).catch(err => {
       if (err.code !== 'NOT_AVAILABLE') { throw err; }
-      return this.geocodeAddressFallback(address);
+      return GoogleApi.geocodeAddress(this.apiKey, address, this.language);
     });
   },
 }
