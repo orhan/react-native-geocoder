@@ -114,7 +114,7 @@ export default {
 
     if (json.status !== 'OK') {
       return Promise.reject(new Error(`geocoding error ${json.status}, ${json.error_message}`));
-    } else if (!json.length) {
+    } else if (!json.results) {
       return [];
     }
 
