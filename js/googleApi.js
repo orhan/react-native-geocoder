@@ -18,6 +18,7 @@ export default {
       adminArea: null,
       subAdminArea: null,
       subLocality: null,
+      types: [] || '',
     };
 
     if (raw.geometry && raw.geometry.location) {
@@ -79,6 +80,10 @@ export default {
       }
     });
 
+    if (raw.types) {
+      address.types = raw.types;
+    }
+
     return address;
   },
 
@@ -112,7 +117,7 @@ export default {
     const res = await fetch(url);
     const json = await res.json();
 
-    if (!json.results) {
+    if (json.results && !json.results.length && json.status === 'ZERO_RESULTS') {
       return [];
     } else if (json.status !== 'OK') {
       return Promise.reject(new Error(`geocoding error ${json.status}, ${json.error_message}`));
